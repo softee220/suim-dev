@@ -31,34 +31,31 @@ export default async function PostPage(props: PageProps<'/blog/[slug]'>) {
   const { meta, content } = post
 
   return (
-    <main className="mx-auto w-full max-w-3xl px-6 py-16">
-      <article>
-        <header className="mb-10">
-          <h1 className="text-4xl font-bold">{meta.title}</h1>
-          <p className="mt-3 text-sm text-zinc-500">
-            {meta.date} · {meta.readingMinutes}분 읽기
-          </p>
-          {meta.tags.length > 0 && (
-            <ul className="mt-3 flex flex-wrap gap-2">
-              {meta.tags.map((tag) => (
-                <li
-                  key={tag}
-                  className="rounded-full bg-black/[.06] px-3 py-1 text-xs dark:bg-white/[.1]"
-                >
-                  {tag}
-                </li>
-              ))}
-            </ul>
-          )}
-        </header>
-        <MDXRemote
-          source={content}
-          components={mdxComponents}
-          options={{
-            mdxOptions: { remarkPlugins: [remarkGfm], rehypePlugins: [rehypeHighlight] },
-          }}
-        />
-      </article>
-    </main>
+    <article>
+      <header className="border-border mb-10 border-b pb-8">
+        <h1 className="text-3xl leading-tight font-bold tracking-tight sm:text-4xl">
+          {meta.title}
+        </h1>
+        <p className="text-muted mt-3 text-sm">
+          <time dateTime={meta.date}>{meta.date}</time> · {meta.readingMinutes}분 읽기
+        </p>
+        {meta.tags.length > 0 && (
+          <ul className="mt-4 flex flex-wrap gap-2">
+            {meta.tags.map((tag) => (
+              <li key={tag} className="bg-surface rounded-full px-3 py-1 text-xs">
+                {tag}
+              </li>
+            ))}
+          </ul>
+        )}
+      </header>
+      <MDXRemote
+        source={content}
+        components={mdxComponents}
+        options={{
+          mdxOptions: { remarkPlugins: [remarkGfm], rehypePlugins: [rehypeHighlight] },
+        }}
+      />
+    </article>
   )
 }

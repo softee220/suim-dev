@@ -1,24 +1,60 @@
 @import 'tailwindcss';
 
+/* 다크모드는 <html>에 붙는 .dark 클래스로 전환한다 (lib/theme.ts 참고) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* 컬러 시스템: 컴포넌트에서는 zinc-* 같은 원색 대신 아래 의미 기반 토큰만 쓴다 */
 :root {
+  color-scheme: light;
   --background: #ffffff;
   --foreground: #171717;
+  --surface: #f4f4f5; /* 카드/태그/코드 등 약한 배경 */
+  --border: #e4e4e7;
+  --muted: #71717a; /* 보조 텍스트 */
+  --accent: #2563eb; /* 링크/강조 */
+}
+
+.dark {
+  color-scheme: dark;
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --surface: #18181b;
+  --border: #27272a;
+  --muted: #a1a1aa;
+  --accent: #60a5fa;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* 한글 시스템 폰트를 우선하는 폰트 스택 (Pretendard가 설치돼 있으면 그것을 사용) */
+@theme {
+  --font-sans:
+    Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR',
+    'Malgun Gothic', system-ui, sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* 한글을 어절 단위로 줄바꿈하되, 긴 영문/URL은 넘치지 않게 끊는다 */
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
 }
