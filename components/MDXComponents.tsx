@@ -1,4 +1,6 @@
 import type { MDXComponents } from 'mdx/types'
+import { cloneElement, isValidElement } from 'react'
+import CodeBlock from './CodeBlock'
 
 // MDX 안에서 쓰이는 HTML 요소를 커스텀 컴포넌트로 교체한다.
 // 색상은 globals.css의 토큰(border, surface, muted, accent)만 사용한다.
@@ -20,8 +22,22 @@ export const mdxComponents: MDXComponents = {
     <blockquote className="border-border text-muted my-5 border-l-4 pl-4" {...props} />
   ),
   hr: (props) => <hr className="border-border my-10" {...props} />,
-  pre: (props) => <pre className="my-5 overflow-x-auto rounded-lg text-sm" {...props} />,
-  // 코드 블록의 code는 rehype-highlight가 hljs 클래스를 붙이므로 인라인 코드와 구분된다
+  pre: ({ children }) => {
+    // 코드 블록은 <pre><code class="hljs language-xx">…</code></pre> 구조로 온다
+    if (!isValidElement<{ className?: string }>(children)) {
+      return <CodeBlock>{children}</CodeBlock>
+    }
+
+    const className = children.props.className ?? ''
+    const language = /language-([\w-]+)/.exec(className)?.[1]
+    // 언어를 지정하지 않은 코드 블록에는 hljs가 안 붙어 인라인 코드처럼 보이므로 직접 붙인다
+    const code = className.includes('hljs')
+      ? children
+      : cloneElement(children, { className: `hljs ${className}`.trim() })
+
+    return <CodeBlock language={language}>{code}</CodeBlock>
+  },
+  // rehype-highlight가 코드 블록의 code에 hljs 클래스를 붙이므로 인라인 코드와 구분된다
   code: ({ className, ...props }) =>
     className?.includes('hljs') ? (
       <code className={className} {...props} />

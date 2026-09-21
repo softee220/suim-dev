@@ -68,3 +68,29 @@ export function getAllPosts(): PostMeta[] {
     .map((post) => post.meta)
     .sort((a, b) => b.date.localeCompare(a.date))
 }
+
+export type TagCount = { tag: string; count: number }
+
+/** 전체 태그와 글 수. 글이 많은 태그가 먼저 오고, 같으면 이름순 */
+export function getAllTags(): TagCount[] {
+  const counts = new Map<string, number>()
+  for (const { tags } of getAllPosts()) {
+    for (const tag of tags) counts.set(tag, (counts.get(tag) ?? 0) + 1)
+  }
+
+  return [...counts]
+    .map(([tag, count]) => ({ tag, count }))
+    .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag))
+}
+
+/** 날짜순으로 바로 앞(older)/뒤(newer)에 있는 글 */
+export function getAdjacentPosts(slug: string): {
+  newer: PostMeta | null
+  older: PostMeta | null
+} {
+  const posts = getAllPosts()
+  const index = posts.findIndex((post) => post.slug === slug)
+  if (index === -1) return { newer: null, older: null }
+
+  return { newer: posts[index - 1] ?? null, older: posts[index + 1] ?? null }
+}
