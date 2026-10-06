@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import PostCard from '@/components/PostCard'
 import ProjectCard from '@/components/ProjectCard'
-import { projects } from '@/content/portfolio'
+import { profile, projects } from '@/content/portfolio'
 import { getAllPosts } from '@/lib/posts'
 import { siteConfig } from '@/lib/site'
 
@@ -22,6 +22,9 @@ export default function Home() {
         <p className="text-muted mt-6 max-w-xl text-lg leading-8">
           {siteConfig.description}
         </p>
+        {profile.internshipSummary && (
+          <p className="mt-3 max-w-xl text-sm leading-7">{profile.internshipSummary}</p>
+        )}
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
             href="/blog"
@@ -30,10 +33,10 @@ export default function Home() {
             블로그 글 보기
           </Link>
           <Link
-            href="/portfolio"
+            href="/projects"
             className="border-border hover:bg-surface inline-flex h-11 items-center rounded-full border px-6 text-sm font-medium transition-colors"
           >
-            포트폴리오 보기
+            프로젝트 보기
           </Link>
         </div>
       </section>
@@ -42,13 +45,13 @@ export default function Home() {
         <section className="pb-12 sm:pb-16">
           <div className="mb-4 flex items-baseline justify-between">
             <h2 className="text-xl font-semibold">프로젝트</h2>
-            <Link href="/portfolio" className="text-accent text-sm hover:underline">
+            <Link href="/projects" className="text-accent text-sm hover:underline">
               전체 보기
             </Link>
           </div>
           <ul className="grid gap-4 sm:grid-cols-2">
             {featuredProjects.map((project) => (
-              <li key={project.title}>
+              <li key={project.slug}>
                 <ProjectCard project={project} />
               </li>
             ))}
@@ -56,7 +59,7 @@ export default function Home() {
         </section>
       )}
 
-      <section>
+      <section className="pb-12 sm:pb-16">
         <div className="mb-4 flex items-baseline justify-between">
           <h2 className="text-xl font-semibold">최근 글</h2>
           <Link href="/blog" className="text-accent text-sm hover:underline">
@@ -75,6 +78,32 @@ export default function Home() {
           </ul>
         )}
       </section>
+
+      {(profile.resumeUrl || profile.contacts.length > 0) && (
+        <section className="flex flex-wrap gap-3">
+          {profile.resumeUrl && (
+            <a
+              href={profile.resumeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-foreground text-background inline-flex h-9 items-center rounded-full px-4 text-sm font-medium transition-opacity hover:opacity-80"
+            >
+              이력서 PDF ↓
+            </a>
+          )}
+          {profile.contacts.map(({ label, href }) => (
+            <a
+              key={href}
+              href={href}
+              target={href.startsWith('http') ? '_blank' : undefined}
+              rel="noopener noreferrer"
+              className="border-border hover:bg-surface inline-flex h-9 items-center rounded-full border px-4 text-sm transition-colors"
+            >
+              {label}
+            </a>
+          ))}
+        </section>
+      )}
     </>
   )
 }
