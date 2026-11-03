@@ -33,7 +33,7 @@ export default function Home() {
             블로그 글 보기
           </Link>
           <Link
-            href="/projects"
+            href="/about#projects"
             className="border-border hover:bg-surface inline-flex h-11 items-center rounded-full border px-6 text-sm font-medium transition-colors"
           >
             프로젝트 보기
@@ -45,7 +45,7 @@ export default function Home() {
         <section className="pb-12 sm:pb-16">
           <div className="mb-4 flex items-baseline justify-between">
             <h2 className="text-xl font-semibold">프로젝트</h2>
-            <Link href="/projects" className="text-accent text-sm hover:underline">
+            <Link href="/about#projects" className="text-accent text-sm hover:underline">
               전체 보기
             </Link>
           </div>

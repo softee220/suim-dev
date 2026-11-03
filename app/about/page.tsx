@@ -1,9 +1,12 @@
 import type { Metadata } from 'next'
+import ProjectCard from '@/components/ProjectCard'
 import {
   awards,
   education,
   experiences,
   profile,
+  projectCategories,
+  projects,
   skills,
   type Experience,
   type TimelineItem,
@@ -59,6 +62,13 @@ function TimelineListItem({ item }: { item: TimelineItem }) {
 }
 
 export default function AboutPage() {
+  const projectSections = projectCategories
+    .map((category) => ({
+      ...category,
+      projects: projects.filter((project) => project.category === category.id),
+    }))
+    .filter((section) => section.projects.length > 0)
+
   return (
     <>
       <h1 className="mb-12 text-3xl font-bold tracking-tight">소개</h1>
@@ -97,6 +107,42 @@ export default function AboutPage() {
           </div>
         </section>
 
+        {experiences.length > 0 && (
+          <section>
+            <SectionTitle>경력 · 활동</SectionTitle>
+            <Timeline>
+              {experiences.map((experience) => (
+                <ExperienceItem
+                  key={`${experience.organization}-${experience.period}`}
+                  experience={experience}
+                />
+              ))}
+            </Timeline>
+          </section>
+        )}
+
+        {projectSections.length > 0 && (
+          <section id="projects" className="scroll-mt-24">
+            <SectionTitle>프로젝트</SectionTitle>
+            <div className="space-y-10">
+              {projectSections.map(({ id, label, projects }) => (
+                <div key={id}>
+                  <h3 className="text-muted mb-4 text-sm font-semibold tracking-wide uppercase">
+                    {label}
+                  </h3>
+                  <ul className="grid gap-4 sm:grid-cols-2">
+                    {projects.map((project) => (
+                      <li key={project.slug}>
+                        <ProjectCard project={project} />
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
         <section>
           <SectionTitle>기술 스택</SectionTitle>
           <dl className="space-y-5">
@@ -119,20 +165,6 @@ export default function AboutPage() {
             ))}
           </dl>
         </section>
-
-        {experiences.length > 0 && (
-          <section>
-            <SectionTitle>경력 · 인턴</SectionTitle>
-            <Timeline>
-              {experiences.map((experience) => (
-                <ExperienceItem
-                  key={`${experience.organization}-${experience.period}`}
-                  experience={experience}
-                />
-              ))}
-            </Timeline>
-          </section>
-        )}
 
         {education.length > 0 && (
           <section>
