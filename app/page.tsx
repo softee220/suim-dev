@@ -99,40 +99,6 @@ export default function Home() {
           </ul>
         )}
       </section>
-
-      {(profile.resumeUrl || profile.contacts.length > 0) && (
-        <Reveal>
-          <section className="border-border bg-surface/60 relative overflow-hidden rounded-3xl border p-8 sm:p-10">
-            <p className="text-accent text-xs font-semibold tracking-[0.25em] uppercase">
-              Contact
-            </p>
-            <h2 className="mt-2 text-2xl font-bold tracking-tight">같이 헤엄쳐요 🫧</h2>
-            <div className="mt-6 flex flex-wrap gap-3">
-              {profile.resumeUrl && (
-                <a
-                  href={profile.resumeUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-foreground text-background inline-flex h-10 items-center rounded-full px-5 text-sm font-semibold transition-transform hover:-translate-y-0.5"
-                >
-                  이력서 PDF ↓
-                </a>
-              )}
-              {profile.contacts.map(({ label, href }) => (
-                <a
-                  key={href}
-                  href={href}
-                  target={href.startsWith('http') ? '_blank' : undefined}
-                  rel="noopener noreferrer"
-                  className="border-border bg-background hover:border-accent hover:text-accent inline-flex h-10 items-center rounded-full border px-5 text-sm transition-colors"
-                >
-                  {label}
-                </a>
-              ))}
-            </div>
-          </section>
-        </Reveal>
-      )}
     </>
   )
 }
