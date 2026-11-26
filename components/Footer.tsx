@@ -7,7 +7,10 @@ export default function Footer() {
         <p>
           © {new Date().getFullYear()} {siteConfig.author}. All rights reserved.
         </p>
-        <p>Built with Next.js &amp; MDX</p>
+        <p>
+          <span className="text-accent font-medium">Dive into the SUIMming pool!</span> ·
+          Built with Next.js &amp; MDX
+        </p>
       </div>
     </footer>
   )

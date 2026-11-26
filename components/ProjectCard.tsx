@@ -47,13 +47,15 @@ export default function ProjectCard({ project }: { project: Project }) {
 
   return (
     <>
-      <article className="border-border hover:bg-surface/50 flex h-full flex-col rounded-xl border p-5 transition-colors">
+      <article className="card-float border-border bg-background flex h-full flex-col rounded-2xl border p-6">
         <button
           type="button"
           onClick={() => dialogRef.current?.showModal()}
           className="group flex-1 cursor-pointer text-left"
         >
-          <h3 className="text-lg font-semibold group-hover:underline">{project.title}</h3>
+          <h3 className="group-hover:text-accent text-lg font-semibold transition-colors">
+            {project.title}
+          </h3>
           <p className="text-muted mt-1 text-sm">{project.period}</p>
           <p className="text-muted mt-3 leading-7">{project.description}</p>
         </button>

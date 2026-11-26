@@ -3,7 +3,6 @@ import './globals.css'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 import { siteConfig } from '@/lib/site'
-import { themeInitScript } from '@/lib/theme'
 
 export const metadata: Metadata = {
   title: {
@@ -15,11 +14,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
-    // 초기 스크립트가 hydration 전에 dark 클래스를 붙이므로 suppressHydrationWarning이 필요하다
-    <html lang="ko" className="h-full antialiased" suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-      </head>
+    <html lang="ko" className="h-full antialiased">
       <body className="flex min-h-full flex-col">
         <Header />
         <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-10 sm:py-16">

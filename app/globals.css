@@ -1,27 +1,22 @@
 @import 'tailwindcss';
 
-/* 다크모드는 <html>에 붙는 .dark 클래스로 전환한다 (lib/theme.ts 참고) */
-@custom-variant dark (&:where(.dark, .dark *));
-
 /* 컬러 시스템: 컴포넌트에서는 zinc-* 같은 원색 대신 아래 의미 기반 토큰만 쓴다 */
 :root {
   color-scheme: light;
   --background: #ffffff;
-  --foreground: #171717;
-  --surface: #f4f4f5; /* 카드/태그/코드 등 약한 배경 */
-  --border: #e4e4e7;
-  --muted: #71717a; /* 보조 텍스트 */
-  --accent: #2563eb; /* 링크/강조 */
-}
-
-.dark {
-  color-scheme: dark;
-  --background: #0a0a0a;
-  --foreground: #ededed;
-  --surface: #18181b;
-  --border: #27272a;
-  --muted: #a1a1aa;
-  --accent: #60a5fa;
+  --foreground: #0b2239; /* 깊은 남색 */
+  --surface: #f0f9fb; /* 카드/태그/코드 등 약한 배경: 아주 옅은 물빛 */
+  --border: #dbecf1;
+  --muted: #5b7186; /* 보조 텍스트 */
+  --accent: #0b8aa6; /* 링크/강조: 수영장 청록 */
+  --accent-2: #4cc9d6; /* 보조 강조 */
+  --suim-ink: #3d9be6; /* 히어로 Suim 필기체: 연한 하늘빛 파랑 */
+  --pool-ink: #1679c9; /* 히어로/로고 필기체: 하늘색이지만 배경 위에서도 또렷한 파랑 */
+  /* 히어로 그레인 그라데이션 덩어리 */
+  --blob-1: #8ec5d8;
+  --blob-2: #b5dbe8;
+  --blob-3: #6eaec7;
+  --grain-opacity: 0.25;
 }
 
 @theme inline {
@@ -31,6 +26,7 @@
   --color-border: var(--border);
   --color-muted: var(--muted);
   --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
 }
 
 /* 한글 시스템 폰트를 우선하는 폰트 스택 (Pretendard가 설치돼 있으면 그것을 사용) */
@@ -44,6 +40,8 @@
 
 body {
   background: var(--background);
+  /* 히어로가 화면 너비로 튀어나올 때 가로 스크롤이 생기지 않게 한다 */
+  overflow-x: clip;
   color: var(--foreground);
   /* 한글을 어절 단위로 줄바꿈하되, 긴 영문/URL은 넘치지 않게 끊는다 */
   word-break: keep-all;
@@ -62,4 +60,225 @@ html:has(dialog[open]) {
 
 ::selection {
   background: color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+/* ───────── 바다 테마 인터랙션 ───────── */
+
+/* 히어로 필기체: 포스터처럼 굵은 대문자 위에 겹쳐 놓는다 */
+.hero-script {
+  font-size: 1.45em;
+  line-height: 0;
+  color: var(--suim-ink);
+  /* 필기체는 굵기가 하나뿐이라, 같은 색 그림자를 사방으로 살짝 겹쳐 획을 두껍게 만든다.
+     (text-stroke는 글자마다 외곽선을 그려서 이어지는 획 사이에 틈이 보인다) */
+  text-shadow:
+    0.022em 0 0 var(--suim-ink),
+    -0.022em 0 0 var(--suim-ink),
+    0 0.022em 0 var(--suim-ink),
+    0 -0.022em 0 var(--suim-ink),
+    0.016em 0.016em 0 var(--suim-ink),
+    -0.016em -0.016em 0 var(--suim-ink),
+    0.016em -0.016em 0 var(--suim-ink),
+    -0.016em 0.016em 0 var(--suim-ink),
+    0 0 2px rgb(255 255 255 / 0.9),
+    0 2px 16px rgb(255 255 255 / 0.85);
+  transform: translateY(-0.08em) rotate(-6deg);
+  transform-origin: left bottom;
+}
+
+/* 그레인 그라데이션: 크게 흐린 덩어리들이 천천히 숨 쉬듯 움직인다 */
+.blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  will-change: transform;
+}
+
+.blob-1 {
+  top: -25%;
+  left: -15%;
+  width: 60vw;
+  height: 70vh;
+  background: var(--blob-1);
+  animation: blob-a 22s ease-in-out infinite alternate;
+}
+
+.blob-2 {
+  top: 10%;
+  right: -10%;
+  width: 55vw;
+  height: 60vh;
+  background: var(--blob-2);
+  animation: blob-b 26s ease-in-out infinite alternate;
+}
+
+.blob-3 {
+  bottom: -10%;
+  left: 30%;
+  width: 50vw;
+  height: 45vh;
+  background: var(--blob-3);
+  opacity: 0.8;
+  animation: blob-c 18s ease-in-out infinite alternate;
+}
+
+@keyframes blob-a {
+  to {
+    transform: translate(8vw, 6vh) scale(1.1) rotate(8deg);
+  }
+}
+
+@keyframes blob-b {
+  to {
+    transform: translate(-10vw, 8vh) scale(0.9) rotate(-10deg);
+  }
+}
+
+@keyframes blob-c {
+  to {
+    transform: translate(-8vw, -10vh) scale(1.15);
+  }
+}
+
+/* 고운 입자: SVG 노이즈를 원래 크기로 반복해서 확대해도 자글자글해지지 않는다 */
+.grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='2.4 0 0 0 -0.7 2.4 0 0 0 -0.7 2.4 0 0 0 -0.7 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: overlay;
+}
+
+/* 물결: 같은 모양을 두 번 이어 붙인 SVG를 반만큼 옆으로 흘려 끊김 없이 반복한다 */
+.wave {
+  animation: wave-drift linear infinite;
+}
+
+@keyframes wave-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* 글래스 버튼: 반투명한 유리판 뒤로 배경이 흐리게 비치고, 위쪽 가장자리에 빛이 맺힌다 */
+.btn-glass {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 3rem;
+  padding: 0 1.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--foreground);
+  background: linear-gradient(
+    135deg,
+    rgb(255 255 255 / 0.55) 0%,
+    rgb(255 255 255 / 0.2) 100%
+  );
+  border: 1px solid rgb(255 255 255 / 0.7);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.9),
+    inset 0 -1px 0 rgb(255 255 255 / 0.25),
+    0 8px 24px -12px rgb(6 80 120 / 0.35);
+  backdrop-filter: blur(14px) saturate(1.6);
+  -webkit-backdrop-filter: blur(14px) saturate(1.6);
+  transition:
+    transform 250ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 250ms ease,
+    background 250ms ease;
+}
+
+.btn-glass:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(
+    135deg,
+    rgb(255 255 255 / 0.75) 0%,
+    rgb(255 255 255 / 0.35) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 1),
+    inset 0 -1px 0 rgb(255 255 255 / 0.3),
+    0 14px 30px -14px rgb(6 80 120 / 0.45);
+}
+
+/* 주 버튼은 바다색이 비치는 유리 */
+.btn-glass-primary {
+  color: #fff;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--pool-ink) 80%, transparent) 0%,
+    color-mix(in srgb, var(--pool-ink) 55%, transparent) 100%
+  );
+  border-color: rgb(255 255 255 / 0.45);
+}
+
+.btn-glass-primary:hover {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--pool-ink) 92%, transparent) 0%,
+    color-mix(in srgb, var(--pool-ink) 70%, transparent) 100%
+  );
+}
+
+/* 스크롤 안내 화살표가 둥실둥실 */
+.bob {
+  animation: bob 2.4s ease-in-out infinite;
+}
+
+@keyframes bob {
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+/* 스크롤 등장: Reveal 컴포넌트가 화면에 들어오면 data-visible을 붙인다 */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 700ms ease,
+    transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+[data-reveal][data-visible] {
+  opacity: 1;
+  transform: none;
+}
+
+/* 카드: 떠오르며 물빛 테두리가 비친다 */
+.card-float {
+  transition:
+    transform 300ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 300ms ease,
+    border-color 300ms ease;
+}
+
+.card-float:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+  box-shadow: 0 14px 32px -16px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+/* 움직임을 줄이도록 설정한 사용자에게는 애니메이션을 끈다 */
+@media (prefers-reduced-motion: reduce) {
+  .blob,
+  .wave,
+  .bob {
+    animation: none;
+  }
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .card-float,
+  .card-float:hover,
+  .btn-glass:hover {
+    transform: none;
+  }
 }
