@@ -239,11 +239,11 @@ export default function ProjectCard({ project }: { project: Project }) {
             <DetailSection title="결과">{project.result}</DetailSection>
 
             {project.troubleshooting.length > 0 && (
-              <section>
+              <section className="border-border border-t pt-8">
                 <h3 className="font-semibold">트러블슈팅</h3>
-                <div className="mt-3 space-y-4">
+                <div className="mt-3 space-y-6">
                   {project.troubleshooting.map((item) => (
-                    <div key={item.title} className="border-border rounded-xl border p-4">
+                    <div key={item.title}>
                       <h4 className="font-medium">{item.title}</h4>
                       <p className="text-muted mt-2 leading-7">{item.content}</p>
                     </div>

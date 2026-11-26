@@ -63,6 +63,7 @@ function TimelineListItem({ item }: { item: TimelineItem }) {
     <li className="relative">
       <TimelineDot />
       <h3 className="text-lg font-semibold">{item.title}</h3>
+      {item.subtitle && <p className="mt-1 font-semibold">{item.subtitle}</p>}
       <p className="text-muted mt-1 text-sm">{item.period}</p>
       {item.description && <p className="mt-3 leading-7">{item.description}</p>}
     </li>
@@ -103,6 +104,9 @@ export default function AboutPage() {
               )}
               <div className="min-w-0">
                 <div className="space-y-4 leading-8">
+                  {profile.headline && (
+                    <p className="text-lg font-bold">{profile.headline}</p>
+                  )}
                   {profile.intro.map((paragraph) => (
                     <p key={paragraph}>{paragraph}</p>
                   ))}
@@ -168,10 +172,13 @@ export default function AboutPage() {
         <Reveal>
           <section>
             <SectionTitle>기술 스택</SectionTitle>
-            <dl className="space-y-5">
+            {/* 분류 이름은 왼쪽 고정 폭 칸에, 기술들은 그 오른쪽에 한 줄로 나열한다 */}
+            <dl className="space-y-4">
               {skills.map(({ category, items }) => (
-                <div key={category}>
-                  <dt className="text-muted mb-2 text-sm font-medium">{category}</dt>
+                <div key={category} className="flex items-start gap-4">
+                  <dt className="text-muted w-24 shrink-0 pt-1 text-sm font-medium">
+                    {category}
+                  </dt>
                   <dd>
                     <ul className="flex flex-wrap gap-2">
                       {items.map((item) => (
