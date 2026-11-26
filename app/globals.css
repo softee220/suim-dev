@@ -205,6 +205,16 @@ html:has(dialog[open]) {
     0 14px 30px -14px rgb(6 80 120 / 0.45);
 }
 
+/* 아이콘 하나만 들어가는 작은 원형 유리 버튼 (팝업 닫기 등) */
+.btn-glass-icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  justify-content: center;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
 /* 주 버튼은 바다색이 비치는 유리 */
 .btn-glass-primary {
   color: #fff;

@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
+import ContactLinks from '@/components/ContactLinks'
 import ProjectCard from '@/components/ProjectCard'
 import Reveal from '@/components/Reveal'
 import {
@@ -86,34 +88,39 @@ export default function AboutPage() {
         <Reveal>
           <section>
             <SectionTitle>자기소개</SectionTitle>
-            <div className="space-y-4 leading-8">
-              {profile.intro.map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
-              ))}
-            </div>
-
-            <div className="mt-6 flex flex-wrap gap-3">
-              {profile.resumeUrl && (
-                <a
-                  href={profile.resumeUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-foreground text-background inline-flex h-9 items-center rounded-full px-4 text-sm font-medium transition-opacity hover:opacity-80"
-                >
-                  이력서 PDF ↓
-                </a>
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-8">
+              {profile.photo && (
+                <Image
+                  src={profile.photo}
+                  alt="프로필 사진"
+                  width={796}
+                  height={1024}
+                  sizes="176px"
+                  priority
+                  // 증명사진 비율(약 3:4) 그대로 세로로 긴 타원으로 잘라 보여준다
+                  className="ring-surface h-auto w-36 shrink-0 rounded-[50%] ring-4 sm:w-44"
+                />
               )}
-              {profile.contacts.map(({ label, href }) => (
-                <a
-                  key={href}
-                  href={href}
-                  target={href.startsWith('http') ? '_blank' : undefined}
-                  rel="noopener noreferrer"
-                  className="border-border hover:bg-surface inline-flex h-9 items-center rounded-full border px-4 text-sm transition-colors"
-                >
-                  {label}
-                </a>
-              ))}
+              <div className="min-w-0">
+                <div className="space-y-4 leading-8">
+                  {profile.intro.map((paragraph) => (
+                    <p key={paragraph}>{paragraph}</p>
+                  ))}
+                </div>
+                <div className="mt-6 flex flex-wrap items-center gap-3">
+                  {profile.resumeUrl && (
+                    <a
+                      href={profile.resumeUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-foreground text-background inline-flex h-9 items-center rounded-full px-4 text-sm font-medium transition-opacity hover:opacity-80"
+                    >
+                      이력서 PDF ↓
+                    </a>
+                  )}
+                  <ContactLinks contacts={profile.contacts} />
+                </div>
+              </div>
             </div>
           </section>
         </Reveal>

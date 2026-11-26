@@ -1,10 +1,82 @@
 import type { MDXComponents } from 'mdx/types'
+import Image from 'next/image'
 import { cloneElement, isValidElement } from 'react'
 import CodeBlock from './CodeBlock'
 
 // MDX 안에서 쓰이는 HTML 요소를 커스텀 컴포넌트로 교체한다.
 // 색상은 globals.css의 토큰(border, surface, muted, accent)만 사용한다.
+type FigureProps = {
+  src: string
+  alt: string
+  /** MDX에서는 JS 표현식({800})이 막혀 있어 문자열("800")로 받는다 */
+  width: number | string
+  height: number | string
+  /** 사진 아래 설명 (없으면 alt를 쓴다) */
+  caption?: string
+  /** 사진 출처 */
+  credit?: string
+}
+
+/** 글 안에 넣는 사진. MDX에서 <Figure src="..." alt="..." width="800" height="500" />로 쓴다 */
+function Figure({ src, alt, width, height, caption, credit }: FigureProps) {
+  return (
+    <figure className="my-8">
+      <Image
+        src={src}
+        alt={alt}
+        width={Number(width)}
+        height={Number(height)}
+        sizes="(min-width: 768px) 720px, 100vw"
+        className="border-border w-full rounded-xl border"
+      />
+      <figcaption className="text-muted mt-2 text-center text-sm">
+        {caption ?? alt}
+        {credit && <span className="opacity-70"> · 사진: {credit}</span>}
+      </figcaption>
+    </figure>
+  )
+}
+
+type ScreenshotProps = Pick<FigureProps, 'src' | 'alt' | 'width' | 'height'>
+
+/** FigureGroup 안에서 쓰는 사진 한 장 (캡션 없이 사진만) */
+function Screenshot({ src, alt, width, height }: ScreenshotProps) {
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={Number(width)}
+      height={Number(height)}
+      sizes="(min-width: 480px) 224px, 50vw"
+      className="border-border w-full rounded-xl border"
+    />
+  )
+}
+
+/** 휴대폰 화면처럼 세로로 긴 사진을 두 장씩 나란히 놓는다. 안에 <Screenshot />을 넣어 쓴다 */
+function FigureGroup({
+  caption,
+  children,
+}: {
+  caption?: string
+  children: React.ReactNode
+}) {
+  return (
+    <figure className="my-8">
+      <div className="mx-auto grid max-w-md grid-cols-2 items-start gap-3 sm:gap-4">
+        {children}
+      </div>
+      {caption && (
+        <figcaption className="text-muted mt-2 text-center text-sm">{caption}</figcaption>
+      )}
+    </figure>
+  )
+}
+
 export const mdxComponents: MDXComponents = {
+  Figure,
+  FigureGroup,
+  Screenshot,
   h1: (props) => (
     <h1 className="mt-10 mb-4 text-3xl font-bold tracking-tight" {...props} />
   ),

@@ -37,8 +37,6 @@ export type Project = {
   /** 목록 페이지에서 이 프로젝트가 들어갈 분야 섹션 */
   category: ProjectCategory
   period: string
-  /** 인원 구성. 예: "개인 프로젝트", "4인 팀 프로젝트" */
-  team: string
   /** 팀 프로젝트에서 내가 맡은 역할 */
   role: string
   /** 목록/카드에 쓰이는 한 줄~두 문장 요약 */
@@ -55,11 +53,42 @@ export type Project = {
   links: Link[]
   /** true면 홈 화면에도 노출된다 */
   featured?: boolean
+  /** 카드 위쪽과 상세 팝업 맨 위에 깔리는 대표 사진 */
+  thumbnail?: string
+  /** 썸네일에서 보여줄 부분 (CSS object-position). 기본값은 가운데 */
+  thumbnailPosition?: string
+  /** 'contain'이면 썸네일을 자르지 않고 통째로 보여준다 (로고처럼 잘리면 안 되는 사진). 기본값은 'cover' */
+  thumbnailFit?: 'cover' | 'contain'
+  /** 상세 팝업 안에 들어가는 사진들 */
+  gallery?: ProjectImage[]
+  /** 상세 팝업의 "화면" 섹션 맨 앞에 들어가는 영상들 */
+  videos?: ProjectVideo[]
+}
+
+/** 프로젝트 사진 한 장. 파일은 public/projects/<slug>/ 아래에 둔다 */
+export type ProjectImage = {
+  src: string
+  /** 사진 설명 (화면에 캡션으로도 보인다) */
+  alt: string
+  width: number
+  height: number
+}
+
+/** 상세 팝업 안에 넣는 YouTube 영상 */
+export type ProjectVideo = {
+  /** youtube.com/watch?v=<여기> 또는 youtube.com/shorts/<여기> 부분 */
+  youtubeId: string
+  /** 영상 설명 (화면에 캡션으로도 보인다) */
+  title: string
+  /** 쇼츠처럼 세로 영상이면 true */
+  vertical?: boolean
 }
 
 export type SkillGroup = { category: string; items: string[] }
 
 export const profile = {
+  // 소개 페이지 자기소개 옆에 보이는 프로필 사진 (public 아래 경로). 빈 문자열이면 숨겨진다
+  photo: '/profile.jpg',
   intro: [
     '서강대학교 아트&테크놀로지학과에서 융합소프트웨어를 함께 전공하며, AI를 활용한 서비스를 기획부터 개발까지 직접 만들어 왔습니다.',
     'AI 챗봇, 모바일 앱, 인터랙티브 아트와 퍼포먼스까지 여러 형태의 상호작용과 사용자 경험을 고민해 왔습니다. 기술을 먼저 정하기보다 사용자가 겪는 문제에서 출발해, 거기에 맞는 기술을 고르는 편입니다.',
@@ -100,9 +129,7 @@ export const projects: Project[] = [
     slug: 'transit-love-pd-chatbot',
     title: '내 친구가 환승연애 막내 PD?',
     category: 'ai',
-    // TODO: 실제 기간으로 바꿔주세요
-    period: '2025.09 – 2025.12',
-    team: '4인 팀 프로젝트',
+    period: '2025.10 – 2025.11',
     role: '기획 · AI 백엔드 개발 (감정 분석, RAG, 리포트)',
     description:
       '"환승연애" 막내 PD가 된 친구 캐릭터와 대화하며 연애 경험을 털어놓으면, AI가 전 연인에 대한 미련도를 5가지 심리 요소로 분석해 감정 리포트로 보여주는 생성형 AI 챗봇입니다. 감정 분석, RAG 기반 점수 정규화, 감정 이미지 매핑, 개인화 리포트 생성을 맡았습니다.',
@@ -127,14 +154,40 @@ export const projects: Project[] = [
     tags: ['Python', 'OpenAI API', 'Flask', 'RAG', 'ChromaDB', 'Vanilla JS', 'Docker'],
     links: [],
     featured: true,
+    thumbnail: '/projects/transit-love-pd-chatbot/thumbnail.webp',
+    thumbnailPosition: 'center 62%',
+    gallery: [
+      {
+        src: '/projects/transit-love-pd-chatbot/chat.png',
+        alt: '채팅 화면',
+        width: 1144,
+        height: 550,
+      },
+      {
+        src: '/projects/transit-love-pd-chatbot/emotions.webp',
+        alt: '대화 키워드에 따라 바뀌는 6가지 감정 이미지',
+        width: 1120,
+        height: 632,
+      },
+      {
+        src: '/projects/transit-love-pd-chatbot/report.png',
+        alt: '대화가 끝나면 보여주는 연애 감정 리포트',
+        width: 611,
+        height: 416,
+      },
+      {
+        src: '/projects/transit-love-pd-chatbot/ending.webp',
+        alt: '미련도에 맞춰 연애 프로그램을 추천하는 엔딩 화면',
+        width: 678,
+        height: 663,
+      },
+    ],
   },
   {
     slug: 'curat',
     title: 'CURAT',
     category: 'ai',
-    // TODO: 실제 기간으로 바꿔주세요
-    period: '2025.12 – 2026.02',
-    team: '3인 팀 프로젝트',
+    period: '2025.12 – 2026.01',
     role: 'AI 도슨트 채팅 개발 (FastAPI, RAG, Tavily)',
     description:
       'AI 기반 미술관 도슨트 모바일 앱입니다. 맞춤형 온보딩 후 AI 도슨트와 채팅하며 작품에 대해 질문하고, 작품 사진을 찍으면 CLIP으로 유사 작품을 찾아줍니다. HateSlop 3기 파이널 프로젝트로, AI 도슨트 채팅 기능을 맡았습니다.',
@@ -168,13 +221,34 @@ export const projects: Project[] = [
     ],
     links: [],
     featured: true,
+    thumbnail: '/projects/curat/thumbnail.png',
+    thumbnailFit: 'contain',
+    gallery: [
+      {
+        src: '/projects/curat/docent-chat.png',
+        alt: '전시 중인 작품에 대해 AI 도슨트와 대화하는 채팅 화면',
+        width: 930,
+        height: 932,
+      },
+      {
+        src: '/projects/curat/similar-artworks.png',
+        alt: '작품 사진을 찍으면 CLIP으로 찾아 주는 비슷한 작품 목록',
+        width: 782,
+        height: 928,
+      },
+      {
+        src: '/projects/curat/testflight.png',
+        alt: 'TestFlight로 배포한 CURAT 베타',
+        width: 1085,
+        height: 598,
+      },
+    ],
   },
   {
     slug: 'explainable-ai',
     title: '얼굴 감정 인식 모델 XAI 분석',
     category: 'ai',
-    period: '2025.09 – 2025.12',
-    team: '개인 프로젝트',
+    period: '2025.11 – 2025.12',
     role: '연구 설계 · 모델 학습 · 분석',
     description:
       'Explainable AI 수업 기말 프로젝트로, FER2013으로 학습한 ResNet18 감정 인식 모델이 얼굴의 어디를 보고 판단하는지 Grad-CAM, Integrated Gradients, LIME, RISE 네 가지 XAI 기법으로 분석하고, Deletion/Insertion 지표로 각 설명의 신뢰도를 정량 비교했습니다.',
@@ -198,14 +272,34 @@ export const projects: Project[] = [
     ],
     tags: ['PyTorch', 'Captum', 'XAI', 'Computer Vision'],
     links: [{ label: '보고서 PDF', href: '/projects/explainable-ai-report.pdf' }],
+    thumbnail: '/projects/explainable-ai/thumbnail-gradcam.png',
+    thumbnailFit: 'contain',
+    gallery: [
+      {
+        src: '/projects/explainable-ai/fer2013-emotions.png',
+        alt: 'FER2013 데이터셋의 7가지 감정',
+        width: 1396,
+        height: 294,
+      },
+      {
+        src: '/projects/explainable-ai/grad-cam.png',
+        alt: 'Grad-CAM 구현 코드와 angry 예측 샘플의 히트맵',
+        width: 1688,
+        height: 390,
+      },
+      {
+        src: '/projects/explainable-ai/integrated-gradients.webp',
+        alt: 'Integrated Gradients baseline 선택 코드와 픽셀 단위 기여도 히트맵',
+        width: 1652,
+        height: 530,
+      },
+    ],
   },
   {
     slug: 'toast-out',
     title: 'TOAST OUT',
     category: 'art-tech',
-    // TODO: 실제 기간으로 바꿔주세요
-    period: '2026.03 – 2026.05',
-    team: '3인 팀 프로젝트',
+    period: '2024.10 – 2024.12',
     role: '기획 · 개발',
     description:
       '번아웃 직전 상태(토스트 아웃)를 주제로 한 p5.js 내러티브 인터랙티브 아트입니다. 토스트 캐릭터가 번아웃에 빠졌다가 다시 일어서는 이야기를 7개 장면의 인터랙션으로 구현했습니다.',
@@ -216,11 +310,6 @@ export const projects: Project[] = [
     result:
       '마우스 추적, 충돌 판정, 프레임 애니메이션, 잔상 효과 등 장면별 인터랙션 7개를 p5.js로 구현해 발표했습니다.',
     troubleshooting: [
-      {
-        title: '조작은 자유롭게, 이야기는 정해진 대로',
-        content:
-          '추락 장면에서 관객이 토스트를 움직일 수 있게 하면서도, 이야기상 토스트는 반드시 구멍에 빠져야 했습니다. 왼쪽에서 미는 힘을 오른쪽 이동 속도보다 크게 설정해 어떻게 조작해도 결국 떨어지도록 만들고, 구멍에 닿으면 rotate()로 회전시켜 떨어지는 순간을 강조했습니다.',
-      },
       {
         title: '하나의 스크립트에 쌓인 7개 장면',
         content:
@@ -234,14 +323,28 @@ export const projects: Project[] = [
         href: 'https://editor.p5js.org/skim6870/sketches/PbL1h0EA8',
       },
     ],
+    thumbnail: '/projects/toast-out/thumbnail.png',
+    videos: [{ youtubeId: 'OjM_H7HHFmQ', title: '시연 영상' }],
+    gallery: [
+      {
+        src: '/projects/toast-out/dementor.png',
+        alt: '디멘터 장면: 마우스를 따라 다가오는 디멘터와 충돌 처리 코드',
+        width: 1920,
+        height: 1080,
+      },
+      {
+        src: '/projects/toast-out/burnout.png',
+        alt: '번아웃 장면: 토스트가 타 들어가는 시퀀스 애니메이션',
+        width: 1920,
+        height: 1080,
+      },
+    ],
   },
   {
     slug: 'samulnori-performance',
     title: '사물놀이 인터랙티브 퍼포먼스',
     category: 'art-tech',
-    // TODO: 실제 기간으로 바꿔주세요
-    period: '2026.03 – 2026.05',
-    team: '5인 팀 프로젝트',
+    period: '2024.05 – 2024.06',
     role: '사운드 디자인 · 북 연주',
     description:
       'Google MediaPipe의 손 제스처 인식을 Max 8과 연결해, 허공에서 손을 움직여 사물놀이 가락(7채, 6채)을 연주하는 퍼포먼스입니다. Intro to Sonic Arts 기말 프로젝트로, 사운드를 맡아 북 소리를 만들고 공연에서 북 파트를 연주했습니다.',
@@ -263,16 +366,32 @@ export const projects: Project[] = [
           'subtractive synthesis로 북을 합성했지만 가죽을 두드리는 특유의 소리가 나지 않고 서양 탐탐 드럼처럼 들렸습니다. FM synthesis로 만든 징도 소리가 끝나지 않고 길게 이어지는 문제가 있었습니다. 합성음으로는 사물놀이의 질감을 살리기 어렵다고 판단해 장구·북·징·꽹과리를 직접 녹음해 사용했습니다.',
       },
     ],
-    tags: ['Google MediaPipe', 'Max 8', 'Gesture Recognition', 'Sound Design'],
+    tags: ['Google MediaPipe', 'Max 8', 'Sound Design'],
     links: [],
     featured: true,
+    thumbnail: '/projects/samulnori-performance/thumbnail.webp',
+    videos: [{ youtubeId: 'kjkQ3Nkdb-M', title: '공연 영상', vertical: true }],
+    thumbnailPosition: 'center 45%',
+    gallery: [
+      {
+        src: '/projects/samulnori-performance/max-patches.webp',
+        alt: '악기별 Max 패치 (징, 장구, 북)',
+        width: 2000,
+        height: 538,
+      },
+      {
+        src: '/projects/samulnori-performance/recording.webp',
+        alt: '장구·북·징·꽹과리 소리를 직접 녹음하던 현장',
+        width: 896,
+        height: 564,
+      },
+    ],
   },
   {
     slug: 'chalkak',
     title: '찰칵!',
     category: 'game',
-    period: '2024 (약 1년)',
-    team: '5인 팀 프로젝트',
+    period: '2024.03 – 2024.12',
     role: '기획 · 개발 (메인 맵, 미니게임 3)',
     description:
       '국궁, 임실필봉농악, 문화재 복원을 소재로 한 Unity(C#) 2D 탑다운 RPG입니다. 메인 맵 시스템과 "경복궁 낙서 지우기" 미니게임 개발을 맡았고, ATC 2024에서 전시했습니다.',
@@ -303,6 +422,34 @@ export const projects: Project[] = [
       },
     ],
     featured: true,
+    thumbnail: '/projects/chalkak/thumbnail.webp',
+    thumbnailPosition: 'center 40%',
+    gallery: [
+      {
+        src: '/projects/chalkak/graffiti-game.webp',
+        alt: '"경복궁 낙서 지우기" 미니게임: 제한 시간 안에 낙서 타일을 지워 담장을 복원한다',
+        width: 1619,
+        height: 864,
+      },
+      {
+        src: '/projects/chalkak/main-scenes.webp',
+        alt: '메인 맵 주요 씬들',
+        width: 2000,
+        height: 1021,
+      },
+      {
+        src: '/projects/chalkak/heritage.webp',
+        alt: '게임에 담은 문화유산: 국궁, 임실필봉농악, 문화유산 복원기술',
+        width: 2000,
+        height: 1060,
+      },
+      {
+        src: '/projects/chalkak/exhibition.jpg',
+        alt: '2024-2 서강융합기술경진대회 전시 부스',
+        width: 1500,
+        height: 2000,
+      },
+    ],
   },
 ]
 
