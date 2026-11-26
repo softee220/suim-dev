@@ -18,6 +18,8 @@ export type Troubleshooting = {
 export type TimelineItem = {
   period: string
   title: string
+  /** 제목 바로 아래 굵게 보이는 한 줄 (예: 복수전공) */
+  subtitle?: string
   description?: string
 }
 
@@ -89,10 +91,12 @@ export type SkillGroup = { category: string; items: string[] }
 export const profile = {
   // 소개 페이지 자기소개 옆에 보이는 프로필 사진 (public 아래 경로). 빈 문자열이면 숨겨진다
   photo: '/profile.jpg',
+  /** 소개 페이지 자기소개 맨 앞에 굵게 보이는 한 줄. 빈 문자열이면 숨겨진다 */
+  headline: '안녕하세요, 소프트웨어 개발자 김수임입니다.',
   intro: [
-    '서강대학교 아트&테크놀로지학과에서 융합소프트웨어를 함께 전공하며, AI를 활용한 서비스를 기획부터 개발까지 직접 만들어 왔습니다.',
-    'AI 챗봇, 모바일 앱, 인터랙티브 아트와 퍼포먼스까지 여러 형태의 상호작용과 사용자 경험을 고민해 왔습니다. 기술을 먼저 정하기보다 사용자가 겪는 문제에서 출발해, 거기에 맞는 기술을 고르는 편입니다.',
-    'AI를 제품에 녹여내는 소프트웨어 개발자를 목표로 하고 있습니다.',
+    '서강대학교 아트&테크놀로지학과에서 융합소프트웨어를 함께 전공하며, AI 챗봇과 모바일 앱, 게임, 인터랙티브 아트까지 다양한 형태로 사용자와 상호작용하는 서비스를 기획부터 개발까지 만들어 왔습니다.',
+    '여러 프로젝트를 거치며, 기능을 완성하는 것만큼 그 기능이 누구의 어떤 문제를 푸는지가 중요하다는 것을 배웠습니다. 그래서 기술을 먼저 정하기보다 사용자와 현장의 이야기에서 출발하고, 만든 뒤에는 의도가 실제로 전달됐는지, 결과의 근거는 무엇인지까지 확인하려 합니다.',
+    'AI를 제품과 업무에 자연스럽게 녹여내는 개발자를 목표로 하고 있습니다.',
   ],
   // 메인 페이지에 한두 줄로 노출되는 인턴/경력 요약. 빈 문자열이면 숨겨진다
   internshipSummary: '',
@@ -109,17 +113,17 @@ export const profile = {
 export const experiences: Experience[] = [
   {
     organization: 'AIZ 엔터테인먼트',
-    role: 'AI 개발팀 개발 인턴',
+    role: '콘텐츠개발실 AI 개발팀 개발 인턴',
     period: '2026.01 – 2026.07',
-    bullets: ['게임 챗봇 3종을 개발했습니다.'],
+    bullets: ['게임 챗봇 3종 기획 및 개발'],
   },
   {
     organization: 'HATESLOP (서강대학교 생성형 AI 미디어&테크 학회)',
     role: '학회원',
     period: '2025.09 – 2026.01',
     bullets: [
-      '생성형 AI 챗봇 〈내 친구가 환승연애 막내 PD?〉를 팀으로 기획·개발했습니다.',
-      '파이널 프로젝트로 AI 전시 도슨트 앱 CURAT의 AI 채팅 기능을 개발했습니다.',
+      '생성형 AI 챗봇 〈내 친구가 환승연애 막내 PD?〉 기획·개발',
+      'AI 전시 도슨트 앱 CURAT 개발',
     ],
   },
 ]
@@ -219,7 +223,7 @@ export const projects: Project[] = [
       'CLIP',
       'Next.js',
     ],
-    links: [],
+    links: [{ label: 'GitHub', href: 'https://github.com/hateslop-final/AI-Docent' }],
     featured: true,
     thumbnail: '/projects/curat/thumbnail.png',
     thumbnailFit: 'contain',
@@ -454,16 +458,18 @@ export const projects: Project[] = [
 ]
 
 export const skills: SkillGroup[] = [
-  { category: 'Frontend', items: ['TypeScript', 'React', 'Next.js', 'Tailwind CSS'] },
-  { category: 'Tools', items: ['Git', 'GitHub', 'Vercel', 'ESLint', 'Prettier'] },
+  { category: 'Languages', items: ['Python', 'JavaScript', 'TypeScript', 'C#'] },
+  { category: 'AI', items: ['OpenAI API', 'RAG', 'ChromaDB', 'PyTorch'] },
+  { category: 'Backend', items: ['FastAPI', 'Redis', 'Supabase', 'Docker'] },
+  { category: 'Tools', items: ['Git', 'GitHub', 'Vercel'] },
 ]
 
 // 학력. 비워두면 /about에서 섹션이 숨겨진다
 export const education: TimelineItem[] = [
   {
-    period: '2023.02 –',
+    period: '2023.02 – 2027.08 (졸업 예정) · 재학 중 (7학기)',
     title: '서강대학교 아트&테크놀로지학과',
-    description: '융합소프트웨어 연계전공 · 재학 중',
+    subtitle: '복수전공: 융합소프트웨어 연계전공',
   },
   {
     period: '2025.01 – 2025.05',
@@ -475,18 +481,15 @@ export const education: TimelineItem[] = [
 // 수상·자격증. 비워두면 /about에서 섹션이 숨겨진다
 export const awards: TimelineItem[] = [
   {
-    period: '2026.05',
+    period: '2026.05.17',
     title: 'ADsP (데이터분석 준전문가)',
-    description: '2026.05.17 취득',
   },
   {
-    period: '2025.11',
+    period: '2025.11.29',
     title: 'AI-Prenuer Camp 최우수상',
-    description: '서강대학교 창업지원단',
   },
   {
-    period: '2024.02',
+    period: '2024.02.17',
     title: 'TOEFL 101점',
-    description: '2024.02.17 취득',
   },
 ]

@@ -11,7 +11,7 @@ export default function PostCard({ post }: { post: PostMeta }) {
         {post.title}
       </h3>
       <p className="text-muted mt-1 text-sm">
-        <time dateTime={post.date}>{post.date}</time> · {post.readingMinutes}분 읽기
+        <time dateTime={post.date}>{post.date}</time>
       </p>
       {post.description && (
         <p className="text-muted mt-3 leading-7">{post.description}</p>

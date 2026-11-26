@@ -46,7 +46,7 @@ export default async function PostPage(props: PageProps<'/blog/[slug]'>) {
           {meta.title}
         </h1>
         <p className="text-muted mt-3 text-sm">
-          <time dateTime={meta.date}>{meta.date}</time> · {meta.readingMinutes}분 읽기
+          <time dateTime={meta.date}>{meta.date}</time>
         </p>
         {meta.tags.length > 0 && (
           <ul className="mt-4 flex flex-wrap gap-2">

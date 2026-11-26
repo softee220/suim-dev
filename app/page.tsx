@@ -54,9 +54,7 @@ export default function Home() {
     <>
       <DepthGauge />
 
-      <OceanHero
-        description={`안녕하세요, ${siteConfig.author}입니다. ${siteConfig.description}`}
-      >
+      <OceanHero description={siteConfig.heroIntro}>
         {profile.internshipSummary && (
           <p className="mt-3 max-w-xl text-sm leading-7">{profile.internshipSummary}</p>
         )}
@@ -83,7 +81,7 @@ export default function Home() {
 
       <section className="pb-16 sm:pb-20">
         <Reveal>
-          <SectionHeading eyebrow="Logbook" title="최근 글" href="/blog" />
+          <SectionHeading eyebrow="Blog" title="블로그" href="/blog" />
         </Reveal>
         {recentPosts.length === 0 ? (
           <p className="text-muted">아직 작성된 글이 없습니다.</p>
