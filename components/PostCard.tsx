@@ -5,9 +5,11 @@ export default function PostCard({ post }: { post: PostMeta }) {
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className="border-border hover:bg-surface block rounded-xl border p-5 transition-colors"
+      className="card-float group border-border bg-background block rounded-2xl border p-6"
     >
-      <h3 className="text-lg font-semibold">{post.title}</h3>
+      <h3 className="group-hover:text-accent text-lg font-semibold transition-colors">
+        {post.title}
+      </h3>
       <p className="text-muted mt-1 text-sm">
         <time dateTime={post.date}>{post.date}</time> · {post.readingMinutes}분 읽기
       </p>

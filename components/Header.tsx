@@ -1,21 +1,25 @@
 import Link from 'next/link'
+import { logoFont } from '@/lib/fonts'
 import { siteConfig } from '@/lib/site'
 import NavLinks from './NavLinks'
-import ThemeToggle from './ThemeToggle'
 
 export default function Header() {
   return (
-    <header className="border-border bg-background/80 sticky top-0 z-10 border-b backdrop-blur">
+    <header className="border-border/60 bg-background/70 sticky top-0 z-20 border-b backdrop-blur-md">
       <div className="mx-auto flex h-14 w-full max-w-3xl items-center justify-between gap-2 px-6">
         <Link
           href="/"
-          className="shrink-0 text-lg font-bold tracking-tight whitespace-nowrap"
+          aria-label={`${siteConfig.name} 홈`}
+          className="inline-flex shrink-0 items-center whitespace-nowrap"
         >
-          {siteConfig.name}
+          <span
+            className={`${logoFont.className} text-xl leading-none tracking-[0.06em]`}
+          >
+            {siteConfig.logo}
+          </span>
         </Link>
         <div className="flex items-center gap-2">
           <NavLinks />
-          <ThemeToggle />
         </div>
       </div>
     </header>
