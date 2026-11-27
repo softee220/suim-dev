@@ -481,7 +481,7 @@ export const education: TimelineItem[] = [
 // 수상·자격증. 비워두면 /about에서 섹션이 숨겨진다
 export const awards: TimelineItem[] = [
   {
-    period: '2026.05.17',
+    period: '2026.06.05',
     title: 'ADsP (데이터분석 준전문가)',
   },
   {
