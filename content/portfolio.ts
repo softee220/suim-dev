@@ -487,6 +487,7 @@ export const awards: TimelineItem[] = [
   {
     period: '2025.11.29',
     title: 'AI-Prenuer Camp 최우수상',
+    description: "레터링 케이크 AI 주문 상담 서비스 '링크실장' 기획 및 프로토타입 개발",
   },
   {
     period: '2024.02.17',
