@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
@@ -21,6 +22,8 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
           {children}
         </main>
         <Footer />
+        {/* Vercel Web Analytics: 방문 통계를 Vercel 대시보드로 보낸다 (쿠키 없음, 개인 식별 안 함) */}
+        <Analytics />
       </body>
     </html>
   )
